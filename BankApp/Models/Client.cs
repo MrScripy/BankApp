@@ -8,5 +8,18 @@ namespace BankApp.Models
 {
     internal class Client
     {
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public CurrentAccount CurrentAcc { get; set; }
+        public DepositAccount DepositAcc { get; set; }
+        
+        public Client() { }
+        public Client(string name, string phoneNumber, CurrentAccount currentAcc, DepositAccount depositAcc)
+        {
+            Name = name;
+            PhoneNumber = phoneNumber;
+            CurrentAcc = currentAcc;
+            DepositAcc = depositAcc;
+        }
     }
 }

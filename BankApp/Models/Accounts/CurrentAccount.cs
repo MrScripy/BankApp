@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BankApp.Models
 {
-    internal class Account
-    {
+    class CurrentAccount : Account
+    {        
+        public CurrentAccount() { }
+        public CurrentAccount(int sum) : base(sum) { }
     }
 }
