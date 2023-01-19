@@ -27,13 +27,10 @@ namespace BankApp.Models
 
         public static void DataSave(ObservableCollection<Client> data)
         {
-            using(StreamWriter sw = new StreamWriter(_filePath))
+            using (StreamWriter sw = new StreamWriter(_filePath))
             {
                 string output = JsonConvert.SerializeObject(data);
-                using(StreamWriter sr = new StreamWriter(_filePath))
-                {
-                    sr.Write(output);
-                }
+                sw.Write(output);
             }
         }
     }

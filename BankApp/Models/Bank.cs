@@ -10,14 +10,7 @@ namespace BankApp.Models
 {
     class Bank : IRefill<DepositAccount>, ITransfer<DepositAccount>
     {
-        public ObservableCollection<Client>? ClientsCollection;
-
-        public Bank()
-        {
-            ClientsCollection = DataService.DataLoad(ClientsCollection);
-        }
-
-
+        
         public void OpenAcc<T>(T? account) where T : class, new()
         {
             account = new T();
