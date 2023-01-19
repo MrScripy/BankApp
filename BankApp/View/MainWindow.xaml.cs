@@ -24,7 +24,7 @@ namespace BankApp
         public MainWindow()
         {
             InitializeComponent();
-            MainWindowViewModel main = new MainWindowViewModel();
+            
         }
 
         
