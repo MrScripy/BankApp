@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace BankApp.Models
 {
-    class DepositAccount : CurrentAccount
+    internal interface ITransfer<in A> where A : class
     {
-        public DepositAccount() { }
-        public DepositAccount(int sum) : base(sum) { }
+        void DoTransfer(A debitAcc, A addAcc, int sum);
     }
 }

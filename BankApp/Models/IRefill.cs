@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace BankApp.Models
 {
-    class DepositAccount : CurrentAccount
+    internal interface IRefill<in A> where A : class
     {
-        public DepositAccount() { }
-        public DepositAccount(int sum) : base(sum) { }
+        void DoRefill(A acc, int sum);
     }
 }
