@@ -11,7 +11,7 @@ namespace BankApp.Models
     {
         static readonly string _filePath = "data.txt";
 
-        public static ObservableCollection<T> DataLoad<T>(ObservableCollection<T> dataCollection)
+        public static ObservableCollection<T> DataLoad<T>()
         {
             if (!File.Exists(_filePath))
             {

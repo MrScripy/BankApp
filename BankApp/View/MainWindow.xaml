@@ -12,16 +12,14 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-
+    <Window.Resources>
+        <cmd:CloseCommand x:Key="CloseApplication"/>
+    </Window.Resources>
     <DockPanel Background="#FFB096E4">
         <Menu DockPanel.Dock="Top" Height ="20" FontSize="12" >
             <MenuItem Header="Файл" Height ="20" FontSize="12" Background="MediumPurple">
                 <MenuItem Header="Сохранить" Height ="20" FontSize="12"/>
-                <MenuItem Header="Выйти" Height ="20" FontSize="12">
-                    <MenuItem.Command>
-                        <cmd:CloseCommand/>
-                    </MenuItem.Command>
-                </MenuItem>
+                <MenuItem Header="Выйти" Height ="20" FontSize="12" Command="{StaticResource CloseApplication}"/>
             </MenuItem>
             <MenuItem Header="Помощь" Height ="20" FontSize="12" Background="MediumPurple">
                 <MenuItem Header="О программе" Height ="20" FontSize="12"/>
@@ -33,10 +31,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid Margin="5" Background="MediumPurple" GridLinesVisibility="All" CanUserAddRows="True">
+            <DataGrid Margin="5" Background="MediumPurple" GridLinesVisibility="All" CanUserAddRows="True" ItemsSource="{Binding ClientsCollection}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ФИО"/>
-                    <DataGridTextColumn Header="Телефон"/>
+                    <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="200"/>
+                    <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -96,7 +94,7 @@
                                     <Button Grid.Row="3" Grid.ColumnSpan="2" Content="Перевести" Width="120" Height="30" FontSize="12"/>
                                 </Grid>
                             </TabItem>
-                            <TabItem Header="Пополнение счета">
+                            <TabItem Header="Пополнение счета" >
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>

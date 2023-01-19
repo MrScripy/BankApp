@@ -32,11 +32,17 @@ namespace BankApp.ViewModels
 
         public MainWindowViewModel()
         {
-            
+            clientsCollection = DataService.DataLoad<Client>();
 
         }
 
-        //public ObservableCollection<Client> ClientsCollection;
+        private ObservableCollection<Client> clientsCollection;
+
+        public ObservableCollection<Client> ClientsCollection
+        {
+            get=> clientsCollection;
+            set => Set(ref clientsCollection, value);
+        }
 
         //public MainWindowViewModel()
         //{
