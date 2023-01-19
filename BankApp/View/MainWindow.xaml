@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:l="clr-namespace:BankApp" 
         xmlns:vm="clr-namespace:BankApp.ViewModels"
-        
+        xmlns:cmd="clr-namespace:BankApp.Infrastructure.Commands"
         Title="{Binding Path= Title}"
         Height="600" Width="900">
     <Window.DataContext>
@@ -17,7 +17,11 @@
         <Menu DockPanel.Dock="Top" Height ="20" FontSize="12" >
             <MenuItem Header="Файл" Height ="20" FontSize="12" Background="MediumPurple">
                 <MenuItem Header="Сохранить" Height ="20" FontSize="12"/>
-                <MenuItem Header="Выйти" Height ="20" FontSize="12" Command="{Binding CloseApplicationCommand}"/>
+                <MenuItem Header="Выйти" Height ="20" FontSize="12">
+                    <MenuItem.Command>
+                        <cmd:CloseCommand/>
+                    </MenuItem.Command>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Помощь" Height ="20" FontSize="12" Background="MediumPurple">
                 <MenuItem Header="О программе" Height ="20" FontSize="12"/>
@@ -57,7 +61,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Grid.Row="0" Width="120" Height="30" Content="Добавить счет" FontSize="12" Command="Paste"/>
+                        <Button Grid.Column="0" Grid.Row="0" Width="120" Height="30" Content="Добавить счет" FontSize="12"/>
                         <Button Grid.Column="1" Grid.Row="0" Width="120" Height="30" Content="Закрыть счет" FontSize="12"/>
                         <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Сумма на счету: " FontSize="15"/>
                         <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Text="0.00" Width="100" Margin="10" FontSize="15" Background="MediumPurple"/>

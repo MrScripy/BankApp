@@ -32,11 +32,7 @@ namespace BankApp.ViewModels
 
         public MainWindowViewModel()
         {
-            #region Commands
-
-            CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
-
-            #endregion
+            
 
         }
 
