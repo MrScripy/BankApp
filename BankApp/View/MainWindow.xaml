@@ -17,6 +17,7 @@
         <Menu DockPanel.Dock="Top" Height ="20" FontSize="12" >
             <MenuItem Header="Файл" Height ="20" FontSize="12" Background="MediumPurple">
                 <MenuItem Header="Сохранить" Height ="20" FontSize="12"/>
+                <MenuItem Header="Выйти" Height ="20" FontSize="12" Command="{Binding CloseApplicationCommand}"/>
             </MenuItem>
             <MenuItem Header="Помощь" Height ="20" FontSize="12" Background="MediumPurple">
                 <MenuItem Header="О программе" Height ="20" FontSize="12"/>
