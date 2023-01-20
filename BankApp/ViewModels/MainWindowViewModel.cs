@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -19,7 +20,6 @@ namespace BankApp.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-
         private ObservableCollection<Client> clientsCollection;
 
         private Client selectedClient;
@@ -133,7 +133,7 @@ namespace BankApp.ViewModels
             {
                 if (p as string == selectedAccount[0] && SelectedClient.DepositAcc != null) return true;
                 if (p as string == selectedAccount[1] && SelectedClient.CurrentAcc != null) return true;
-            }                
+            }
             return false;
         }
 
@@ -194,6 +194,8 @@ namespace BankApp.ViewModels
             TransferMoneyCommand = new LambdaCommand(OnTransferMoneyCommandExecuted, CaTransferMoneyCommandExecute);
             #endregion
         }
+
+        #region PrivateMethods
         private int CheckCollection(string name)
         {
             int index = -1;
@@ -223,7 +225,7 @@ namespace BankApp.ViewModels
                     ClientsCollection[index].CurrentAcc.SumMoney += sum;
                 }
             }
-            if (Equals(takeAcc, SelectedAccount[0]))
+            else if (Equals(takeAcc, SelectedAccount[0]))
             {
                 SelectedClient.DepositAcc.SumMoney -= sum;
                 ClientsCollection[index].CurrentAcc.SumMoney += sum;
@@ -234,5 +236,8 @@ namespace BankApp.ViewModels
                 ClientsCollection[index].DepositAcc.SumMoney += sum;
             }
         }
+        #endregion
+
+       
     }
 }
