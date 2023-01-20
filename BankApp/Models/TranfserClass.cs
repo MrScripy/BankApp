@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace BankApp.Models
 {
-    internal class TranfserClass : IRefill<DepositAccount>, ITransfer<DepositAccount>
+    internal class TranfserClass : ITransfer<DepositAccount>
     {
         public void DoRefill(DepositAccount acc, int sum)
         {

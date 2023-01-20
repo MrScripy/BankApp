@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankApp.Models
 {
-    class DepositAccount : CurrentAccount
+    class DepositAccount : Account
     {
         private int sumMoney;
         public override int SumMoney { get => sumMoney; set => Set(ref sumMoney, value); }

@@ -9,7 +9,7 @@
         xmlns:cmd="clr-namespace:BankApp.Infrastructure.Commands"
         
         Title="BankApp"
-        Height="600" Width="1200">
+        Height="700" Width="1200">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -31,16 +31,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid IsReadOnly="False" Margin="5" Background="MediumPurple" 
-                      GridLinesVisibility="All" 
-                      CanUserAddRows="True" 
+            <DataGrid Margin="5" Background="MediumPurple" 
+                      GridLinesVisibility="All"                      
                       ItemsSource="{Binding ClientsCollection}" 
                       AutoGenerateColumns="False"
                       SelectionUnit="FullRow"
-                      SelectedItem="{Binding SelectedClient}"
+                      SelectedItem="{Binding SelectedClient}"                       
                       >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" x:Name="NameDataGridColumn"/>
                     <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="*"/>
                     <DataGridTextColumn Header="Текущий счет" Binding="{Binding CurrentAcc.SumMoney}" Width="*" IsReadOnly="True" />
                     <DataGridTextColumn Header="Депозитный счет" Binding="{Binding DepositAcc.SumMoney}" Width="*" IsReadOnly="True"/>
@@ -67,9 +66,17 @@
                         </Grid.ColumnDefinitions>
                         <!--<Label Content="Депозитный счет" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <TextBlock Grid.Column="1" Grid.Row="0" Height="30" Width="200" Background="MediumPurple" Text="{Binding SelectedClient.DepositAcc.SumMoney}"/>-->
-                        <Button Grid.Column="0" Grid.Row="1" Height="30" Width="100" Content="Открыть"/>
-                        <Button Grid.Column="1" Grid.Row="1" Height="30" Width="100" Content="Закрыть"/>
-                        <ComboBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Width="250" Height="45" Background="MediumPurple" ItemsSource="{Binding SelectedAccount}"/>
+                        <Button Grid.Column="0" Grid.Row="1" Height="30" Width="100" Content="Открыть" Command="{Binding OpenAccount}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="OpenCloseAccountCombobox" Path="SelectionBoxItem"/>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Grid.Column="1" Grid.Row="1" Height="30" Width="100" Content="Закрыть" Command="{Binding CloseAccount}">
+                            <Button.CommandParameter>
+                                <Binding ElementName="OpenCloseAccountCombobox" Path="SelectionBoxItem"/>
+                            </Button.CommandParameter>
+                        </Button>
+                        <ComboBox Name="OpenCloseAccountCombobox" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Width="250" Height="45" Background="MediumPurple" ItemsSource="{Binding SelectedAccount}"/>
                         <!--<TextBlock Text="Депозитный"/>
                             <TextBlock Text="Текущий"/>
                         </ComboBox>-->
@@ -88,6 +95,7 @@
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -96,18 +104,33 @@
                                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock Text="ФИО получателя" />
                                     </Label>
-                                    <TextBox Grid.Column="1" Grid.Row="0" Width="165" Height="45" Background="MediumPurple" FontSize="12"/>
+                                    <TextBox Name="NameTextBox" Grid.Column="1" Grid.Row="0" Width="165" Height="40" Background="MediumPurple" FontSize="12" />
                                     <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock Text="Тип счета пополнения" />
                                     </Label>
-                                    <ComboBox  Grid.Column="1" Grid.Row="1" Width="165" 
-                                              Height="45" Background="MediumPurple" 
+                                    <ComboBox Name="AddAccountCombobox"  Grid.Column="1" Grid.Row="1" Width="165" 
+                                              Height="40" Background="MediumPurple" 
                                               ItemsSource="{Binding SelectedAccount}"/>
                                     <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="Тип счета списания" />
+                                    </Label>
+                                    <ComboBox Name="TakeAccountCombobox" Grid.Column="1" Grid.Row="2" Width="165" 
+                                              Height="40" Background="MediumPurple" 
+                                              ItemsSource="{Binding SelectedAccount}"/>
+                                    <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock Text="Сумма" />
                                     </Label>
-                                    <TextBox Grid.Column="1" Grid.Row="2" Width="165" Height="45" Background="MediumPurple" FontSize="12"/>
-                                    <Button Grid.Row="3" Grid.ColumnSpan="2" Content="Перевести" Width="120" Height="30" FontSize="12"/>
+                                    <TextBox Name="TransferSumTextbox"  Grid.Column="1" Grid.Row="3" Width="165" Height="40" Background="MediumPurple" FontSize="12"/>
+                                    <Button Grid.Row="4" Grid.ColumnSpan="2" Content="Перевести" Width="120" Height="30" FontSize="12" Command="{Binding TransferMoneyCommand}">
+                                        <Button.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource con}">
+                                                <Binding ElementName="NameTextBox" Path="Text"/>
+                                                <Binding ElementName="AddAccountCombobox" Path="SelectionBoxItem"/>
+                                                <Binding ElementName="TakeAccountCombobox" Path="SelectionBoxItem"/>
+                                                <Binding ElementName="TransferSumTextbox" Path="Text"/>
+                                            </MultiBinding>
+                                        </Button.CommandParameter>
+                                    </Button>
                                 </Grid>
                             </TabItem>
                             <TabItem Header="Пополнение счета" >
