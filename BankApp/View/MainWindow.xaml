@@ -7,19 +7,18 @@
         xmlns:l="clr-namespace:BankApp" 
         xmlns:vm="clr-namespace:BankApp.ViewModels"
         xmlns:cmd="clr-namespace:BankApp.Infrastructure.Commands"
-        Title="{Binding Path= Title}"
-        Height="600" Width="900">
+        Title="BankApp"
+        Height="600" Width="1200">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Window.Resources>
+    <!--<Window.Resources>
         <cmd:CloseCommand x:Key="CloseApplication"/>
-    </Window.Resources>
+    </Window.Resources>-->
     <DockPanel Background="#FFB096E4">
         <Menu DockPanel.Dock="Top" Height ="20" FontSize="12" >
-            <MenuItem Header="Файл" Height ="20" FontSize="12" Background="MediumPurple">
-                <MenuItem Header="Сохранить" Height ="20" FontSize="12"/>
-                <MenuItem Header="Выйти" Height ="20" FontSize="12" Command="{StaticResource CloseApplication}"/>
+            <MenuItem Header="Файл" Height ="20" FontSize="12" Background="MediumPurple">                
+                <MenuItem Header="Сохранить и выйти" Height ="20" FontSize="12" Command="{Binding CloseAndSaveApplicationCommand}"/>
             </MenuItem>
             <MenuItem Header="Помощь" Height ="20" FontSize="12" Background="MediumPurple">
                 <MenuItem Header="О программе" Height ="20" FontSize="12"/>
@@ -31,38 +30,53 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid Margin="5" Background="MediumPurple" GridLinesVisibility="All" CanUserAddRows="True" ItemsSource="{Binding ClientsCollection}" AutoGenerateColumns="False">
+            <DataGrid IsReadOnly="False" Margin="5" Background="MediumPurple" 
+                      GridLinesVisibility="All" 
+                      CanUserAddRows="True" 
+                      ItemsSource="{Binding ClientsCollection}" 
+                      AutoGenerateColumns="False"
+                      SelectionUnit="FullRow"
+                      SelectedItem="{Binding SelectedClient}"
+                      
+                      >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="200"/>
+                    <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Текущий счет" Binding="{Binding CurrentAcc.SumMoney}" Width="*"/>
+                    <DataGridTextColumn Header="Текущий счет" Binding="{Binding DepositAcc.SumMoney}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
 
             <DockPanel Grid.Column="1">
-                <TextBlock DockPanel.Dock="Top" Margin="5" Text="ФИО" Background="MediumPurple">
-
-                </TextBlock>
-                <ComboBox DockPanel.Dock="Top" Margin="5" Background="MediumPurple">
-
-                </ComboBox>
+                <TextBlock DockPanel.Dock="Top" Margin="5" Text="{Binding SelectedClient.Name}" Background="MediumPurple" Height="30"/>
                 <Grid DockPanel.Dock="Bottom" Margin="5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.6*"/>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="20*"/>
-                            <RowDefinition Height="59*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Grid.Row="0" Width="120" Height="30" Content="Добавить счет" FontSize="12"/>
-                        <Button Grid.Column="1" Grid.Row="0" Width="120" Height="30" Content="Закрыть счет" FontSize="12"/>
-                        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Сумма на счету: " FontSize="15"/>
-                        <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Text="0.00" Width="100" Margin="10" FontSize="15" Background="MediumPurple"/>
+                        <!--<Label Content="Депозитный счет" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Height="30" Width="200" Background="MediumPurple" Text="{Binding SelectedClient.DepositAcc.SumMoney}"/>-->
+                        <Button Grid.Column="0" Grid.Row="1" Height="30" Width="100" Content="Открыть"/>
+                        <Button Grid.Column="1" Grid.Row="1" Height="30" Width="100" Content="Закрыть"/>
+                        <ComboBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Width="250" Height="45" Background="MediumPurple" ItemsSource="{Binding SelectedAccount}"/>
+                        <!--<TextBlock Text="Депозитный"/>
+                            <TextBlock Text="Текущий"/>
+                        </ComboBox>-->
+                        <!--<Label Content="Текущий счет" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Grid.Row="2" Height="30" Width="200" Background="MediumPurple" Text="{Binding SelectedClient.CurrentAcc.SumMoney}"/>
+                        <Button Grid.Column="0" Grid.Row="3" Height="30" Width="100" Content="Открыть"/>
+                        <Button Grid.Column="1" Grid.Row="3" Height="30" Width="100" Content="Закрыть"/>-->
                     </Grid>
                     
                     <DockPanel Grid.Row="1">
@@ -86,7 +100,9 @@
                                     <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock Text="Тип счета пополнения" />
                                     </Label>
-                                    <ComboBox Grid.Column="1" Grid.Row="1" Width="165" Height="45" Background="MediumPurple"/>
+                                    <ComboBox Name="AddMoneyCombobox" Grid.Column="1" Grid.Row="1" Width="165" 
+                                              Height="45" Background="MediumPurple" 
+                                              ItemsSource="{Binding SelectedAccount}"/>
                                     <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock Text="Сумма" />
                                     </Label>
@@ -109,7 +125,10 @@
                                     <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock Text="Тип счета" />
                                     </Label>
-                                    <ComboBox Grid.Column="1" Grid.Row="0" Width="165" Height="45" Background="MediumPurple" FontSize="12"/>
+                                    <ComboBox Grid.Column="1" Grid.Row="0" Width="165" Height="45" Background="MediumPurple" FontSize="12" ItemsSource="{Binding SelectedAccount}"/>
+                                    <!--<TextBlock Text="Депозитный"/>
+                                        <TextBlock Text="Расчетный"/>
+                                    </ComboBox>-->
                                     <!--<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock Text="Основание пополнения" />
                                     </Label>
@@ -118,7 +137,9 @@
                                         <TextBlock Text="Сумма" />
                                     </Label>
                                     <TextBox Grid.Column="1" Grid.Row="1" Width="165" Height="45" Background="MediumPurple" FontSize="12"/>
-                                    <Button Grid.Row="3" Grid.ColumnSpan="2" Content="Пополнить" Width="120" Height="30" FontSize="12"/>
+                                    <Button Grid.Row="3" Grid.ColumnSpan="2" Content="Пополнить" 
+                                            Width="120" Height="30" FontSize="12" 
+                                            Command="{Binding AddMoneyCommand}"/>
                                 </Grid>
                             </TabItem>
                             

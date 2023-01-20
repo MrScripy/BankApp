@@ -8,15 +8,15 @@ namespace BankApp.Models
 {
     abstract internal class Account
     {
-        internal virtual int SumMoney { get; set; }
-        internal Account()
+        public virtual int SumMoney { get; set; }
+        public Account()
         {
             SumMoney = 0;
         }
 
         internal Account(int sum)
         {
-            SumMoney= sum;
+            SumMoney = sum;
         }
 
     }

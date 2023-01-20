@@ -12,14 +12,18 @@ namespace BankApp.Models
         public string PhoneNumber { get; set; }
         public CurrentAccount CurrentAcc { get; set; }
         public DepositAccount DepositAcc { get; set; }
-        
+
         public Client() { }
-        public Client(string name, string phoneNumber, CurrentAccount currentAcc, DepositAccount depositAcc)
+        public Client(string name, string phoneNumber)
         {
             Name = name;
             PhoneNumber = phoneNumber;
+        }
+        public Client(string name, string phoneNumber, CurrentAccount currentAcc, DepositAccount depositAcc) : this(name, phoneNumber)
+        {
             CurrentAcc = currentAcc;
             DepositAcc = depositAcc;
         }
+
     }
 }
