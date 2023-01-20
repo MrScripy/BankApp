@@ -20,6 +20,7 @@ namespace BankApp.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        #region Fields
         private ObservableCollection<Client> clientsCollection;
 
         private Client selectedClient;
@@ -29,7 +30,7 @@ namespace BankApp.ViewModels
             "Депозитный",
             "Текущий"
         };
-
+        #endregion
 
         #region Properties
         public ObservableCollection<Client> ClientsCollection
@@ -180,8 +181,6 @@ namespace BankApp.ViewModels
 
         #endregion
 
-
-
         public MainWindowViewModel()
         {
             clientsCollection = DataService.DataLoad<Client>();
@@ -236,7 +235,6 @@ namespace BankApp.ViewModels
                 ClientsCollection[index].DepositAcc.SumMoney += sum;
             }
         }
-        #endregion
-              
+        #endregion              
     }
 }

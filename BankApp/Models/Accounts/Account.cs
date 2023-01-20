@@ -15,7 +15,6 @@ namespace BankApp.Models
         {
             SumMoney = 0;
         }
-
         internal Account(int sum)
         {
             SumMoney = sum;
@@ -27,7 +26,6 @@ namespace BankApp.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
         protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (Equals(field, value)) return false;

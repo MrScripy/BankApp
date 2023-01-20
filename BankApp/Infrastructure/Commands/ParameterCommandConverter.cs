@@ -14,7 +14,6 @@ namespace BankApp.Infrastructure.Commands
         {
             return values.Clone();
         }
-
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BankApp.ViewModels.Base
 {
-    internal abstract class ViewModel: INotifyPropertyChanged
+    internal abstract class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -16,7 +16,6 @@ namespace BankApp.ViewModels.Base
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
         protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (Equals(field, value)) return false;
@@ -24,7 +23,5 @@ namespace BankApp.ViewModels.Base
             OnPropertyChanged(propertyName);
             return true;
         }
-
-
     }
 }
