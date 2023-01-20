@@ -237,7 +237,6 @@ namespace BankApp.ViewModels
             }
         }
         #endregion
-
-       
+              
     }
 }
