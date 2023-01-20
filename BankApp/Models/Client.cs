@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BankApp.Models
 {
-    internal class Client
+    internal class Client:INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public string PhoneNumber { get; set; }
-        public CurrentAccount CurrentAcc { get; set; }
-        public DepositAccount DepositAcc { get; set; }
+        private string name;
+        private string phoneNumber;
+        private CurrentAccount currentAcc;
+        private DepositAccount depositAcc;
+        public string Name { get => name; set => Set(ref name, value); }
+        public string PhoneNumber { get => phoneNumber; set => Set(ref phoneNumber, value); }
+        public CurrentAccount CurrentAcc { get => currentAcc; set => Set(ref currentAcc, value); }
+        public DepositAccount DepositAcc { get => depositAcc; set => Set(ref depositAcc, value); }
 
         public Client() { }
         public Client(string name, string phoneNumber)
@@ -25,5 +31,18 @@ namespace BankApp.Models
             DepositAcc = depositAcc;
         }
 
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }

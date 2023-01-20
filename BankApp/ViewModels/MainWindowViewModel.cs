@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -58,15 +59,28 @@ namespace BankApp.ViewModels
 
 
         #endregion
+        #region AddMoney
         public ICommand AddMoneyCommand { get; }
 
-        private void OnAddMoneyCommandCommandExecuted(object p)
+        private void OnAddMoneyCommandExecuted(object p)
         {
-            if (SelectedClient != null)
-                SelectedClient.CurrentAcc.SumMoney += 100;
+            var values = (object[])p;
+            var accType = values[0] as string;
+            var s = values[1] as string;
+            if (int.TryParse(s, out int sum))
+            {
+                if (accType == "Депозитный") SelectedClient.DepositAcc.SumMoney += sum;
+                else if(accType == "Текущий") SelectedClient.CurrentAcc.SumMoney += sum;
+            }
         }
 
-        private bool CanAddMoneyCommandCommandExecute(object p) => true;
+        private bool CanAddMoneyCommandExecute(object p)
+        {
+            if (p != null) return true;
+            return false;
+        }
+        #endregion
+
         #endregion
 
 
@@ -77,7 +91,7 @@ namespace BankApp.ViewModels
 
             #region Commands
             CloseAndSaveApplicationCommand = new LambdaCommand(OnCloseAndSaveApplicationCommandExecuted, CanCloseAndSaveApplicationCommandExecute);
-            AddMoneyCommand = new LambdaCommand(OnAddMoneyCommandCommandExecuted, CanAddMoneyCommandCommandExecute);
+            AddMoneyCommand = new LambdaCommand(OnAddMoneyCommandExecuted, CanAddMoneyCommandExecute);
             #endregion
         }
 
