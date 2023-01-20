@@ -19,7 +19,7 @@ namespace BankApp.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        
+
         private ObservableCollection<Client> clientsCollection;
 
         private Client selectedClient;
@@ -51,7 +51,7 @@ namespace BankApp.ViewModels
         #endregion
 
         #region Commands
-        #region CloseCommand
+        #region CloseAndSaveCommand
         public ICommand CloseAndSaveApplicationCommand { get; }
 
         private void OnCloseAndSaveApplicationCommandExecuted(object p)
@@ -86,7 +86,13 @@ namespace BankApp.ViewModels
 
         private bool CanAddMoneyCommandExecute(object p)
         {
-            if (p != null) return true;
+            if (p != null && SelectedClient != null)
+            {
+                var values = p as object[];
+                var accType = values[0] as string;
+                var sum = values[1] as string;
+                if (values.Length == 2 && !String.IsNullOrEmpty(accType) && !String.IsNullOrEmpty(sum)) return true;
+            }
             return false;
         }
         #endregion
@@ -102,7 +108,11 @@ namespace BankApp.ViewModels
 
         private bool CanOpenAccountExecuted(object p)
         {
-            if (p != null) return true;
+            if (p != null && SelectedClient != null)
+            {
+                if (p as string == selectedAccount[0] && SelectedClient.DepositAcc == null) return true;
+                if (p as string == selectedAccount[1] && SelectedClient.CurrentAcc == null) return true;
+            }
             return false;
         }
 
@@ -119,7 +129,11 @@ namespace BankApp.ViewModels
 
         private bool CanCloseAccountExecuted(object p)
         {
-            if (p != null) return true;
+            if (p != null && SelectedClient != null)
+            {
+                if (p as string == selectedAccount[0] && SelectedClient.DepositAcc != null) return true;
+                if (p as string == selectedAccount[1] && SelectedClient.CurrentAcc != null) return true;
+            }                
             return false;
         }
 
@@ -147,7 +161,7 @@ namespace BankApp.ViewModels
 
         private bool CaTransferMoneyCommandExecute(object p)
         {
-            if (p != null)
+            if (p != null && SelectedClient != null)
             {
                 var values = p as object[];
                 if (values.Length == 4)
@@ -170,7 +184,7 @@ namespace BankApp.ViewModels
 
         public MainWindowViewModel()
         {
-            clientsCollection = DataService.DataLoad<Client>();            
+            clientsCollection = DataService.DataLoad<Client>();
 
             #region Commands
             CloseAndSaveApplicationCommand = new LambdaCommand(OnCloseAndSaveApplicationCommandExecuted, CanCloseAndSaveApplicationCommandExecute);
@@ -222,13 +236,3 @@ namespace BankApp.ViewModels
         }
     }
 }
-
-
-
-
-
-//new ObservableCollection<Client>();
-//clientsCollection.Add(new Client("FFFF", "1233", new CurrentAccount(100), new DepositAccount(500)));
-//clientsCollection.Add(new Client("FFFF", "1233", new CurrentAccount(100), new DepositAccount(500)));
-//clientsCollection.Add(new Client("FFFF", "1233", new CurrentAccount(100), new DepositAccount(500)));
-//clientsCollection.Add(new Client("FFFF", "1233", new CurrentAccount(100), new DepositAccount(500)));
