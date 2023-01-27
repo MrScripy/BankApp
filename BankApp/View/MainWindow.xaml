@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:BankApp.ViewModels"
         xmlns:cmd="clr-namespace:BankApp.Infrastructure.Commands"        
         Title="BankApp"
-        Height="700" Width="1200">
+        Height="700" Width="1300">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -27,22 +27,46 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            <DataGrid Margin="5" Background="MediumPurple" 
+            <TabControl>
+                <TabItem Header="Клиенты">
+                    <DataGrid Margin="5" Background="MediumPurple" 
                       GridLinesVisibility="All"                      
                       ItemsSource="{Binding ClientsCollection}" 
                       AutoGenerateColumns="False"
                       SelectionUnit="FullRow"
                       SelectedItem="{Binding SelectedClient}"
-                      CanUserAddRows="True"                      
+                      CanUserAddRows="True"                       
                       >
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" x:Name="NameDataGridColumn"/>
-                    <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="*"/>
-                    <DataGridTextColumn Header="Текущий счет" Binding="{Binding CurrentAcc.SumMoney}" Width="*" IsReadOnly="True" />
-                    <DataGridTextColumn Header="Депозитный счет" Binding="{Binding DepositAcc.SumMoney}" Width="*" IsReadOnly="True"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" x:Name="NameDataGridColumn"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="*"/>
+                            <DataGridTextColumn Header="Текущий счет" Binding="{Binding CurrentAcc.SumMoney}" Width="*" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Депозитный счет" Binding="{Binding DepositAcc.SumMoney}" Width="*" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Журнал изменений">
+                    <DataGrid Margin="5" Background="MediumPurple" 
+                      GridLinesVisibility="All"                      
+                      ItemsSource="{Binding Changelog.Changelog}" 
+                      AutoGenerateColumns="False"                                          
+                      CanUserAddRows="False"      
+                              
+                      >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Изменение" Binding="{Binding Change}" Width="*" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+            
 
             <DockPanel Grid.Column="1">
                 <TextBlock DockPanel.Dock="Top" Margin="5" Text="{Binding SelectedClient.Name}" Background="MediumPurple" Height="30"/>

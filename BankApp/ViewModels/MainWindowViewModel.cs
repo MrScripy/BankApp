@@ -1,20 +1,12 @@
 ﻿using BankApp.Infrastructure.Commands;
 using BankApp.Models;
+using BankApp.Models.Changelog;
 using BankApp.ViewModels.Base;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Xml.Linq;
 
 namespace BankApp.ViewModels
 {
@@ -22,6 +14,7 @@ namespace BankApp.ViewModels
     {
         #region Fields
         private ObservableCollection<Client> clientsCollection;
+        private ChangelogData changelog;
 
         private Client selectedClient;
 
@@ -39,16 +32,11 @@ namespace BankApp.ViewModels
             set => Set(ref clientsCollection, value);
         }
 
-        public Client SelectedClient
-        {
-            get => selectedClient;
-            set => Set(ref selectedClient, value);
-        }
+        public ChangelogData Changelog { get => changelog; }
 
-        public List<string> SelectedAccount
-        {
-            get => selectedAccount;
-        }
+        public Client SelectedClient { get => selectedClient; set => Set(ref selectedClient, value); }
+
+        public List<string> SelectedAccount { get => selectedAccount; }
         #endregion
 
         #region Commands
@@ -58,6 +46,8 @@ namespace BankApp.ViewModels
         private void OnCloseAndSaveApplicationCommandExecuted(object p)
         {
             DataService.DataSave(clientsCollection);
+
+            DataService.DataSave(changelog.Changelog, "dataChanges.txt");
             Application.Current.Shutdown();
         }
 
@@ -77,10 +67,16 @@ namespace BankApp.ViewModels
                 var s = values[1] as string;
                 if (int.TryParse(s, out int sum))
                 {
-                    //if (accType == selectedAccount[0]) bank.DoRefill(SelectedClient.DepositAcc, sum);
-                    //else bank.DoRefill(SelectedClient.CurrentAcc, sum);
-                    if (accType == selectedAccount[0]) SelectedClient.DepositAcc.SumMoney += sum;
-                    else if (accType == selectedAccount[1]) SelectedClient.CurrentAcc.SumMoney += sum;
+                    if (accType == selectedAccount[0])
+                    {
+                        SelectedClient.DepositAcc.SumMoney += sum;
+                        ChangelogData.TrackChanges(SelectedClient.Name, "Депозитный счет", $"пополнение депозитного счета", (SelectedClient.DepositAcc.SumMoney += sum).ToString());
+                    }
+                    else if (accType == selectedAccount[1])
+                    {
+                        ChangelogData.TrackChanges(SelectedClient.Name, "Текущий счет", $"пополнение текущего счета", (SelectedClient.CurrentAcc.SumMoney += sum).ToString());
+                        SelectedClient.CurrentAcc.SumMoney += sum;
+                    }
                 }
             }
         }
@@ -104,7 +100,6 @@ namespace BankApp.ViewModels
         {
             if (p as string == SelectedAccount[0] && SelectedClient.DepositAcc == null) SelectedClient.DepositAcc = new DepositAccount();
             if (p as string == SelectedAccount[1] && SelectedClient.CurrentAcc == null) SelectedClient.CurrentAcc = new CurrentAccount();
-
         }
 
         private bool CanOpenAccountExecuted(object p)
@@ -154,6 +149,7 @@ namespace BankApp.ViewModels
                 int index = CheckCollection(name);
                 if (index != -1 && int.TryParse(s, out int sum))
                 {
+                    ChangelogData.TrackChanges($"{SelectedClient.Name}\n{name}", $"Перевод денежных средств со счета {SelectedClient.Name} на счет {name}", "", sum.ToString());
                     Transfer(index, accAddType, accTakeType, sum);
                 }
 
@@ -173,7 +169,6 @@ namespace BankApp.ViewModels
                     if (!String.IsNullOrEmpty(name) && !String.IsNullOrEmpty(accAddType) && !String.IsNullOrEmpty(accTakeType))
                         return true;
                 }
-
             }
             return false;
         }
@@ -184,6 +179,8 @@ namespace BankApp.ViewModels
         public MainWindowViewModel()
         {
             clientsCollection = DataService.DataLoad<Client>();
+            changelog = new ChangelogData();
+            changelog.Changelog = DataService.DataLoad<Changes>("dataChanges.txt");            
 
             #region Commands
             CloseAndSaveApplicationCommand = new LambdaCommand(OnCloseAndSaveApplicationCommandExecuted, CanCloseAndSaveApplicationCommandExecute);
@@ -235,6 +232,7 @@ namespace BankApp.ViewModels
                 ClientsCollection[index].DepositAcc.SumMoney += sum;
             }
         }
+
         #endregion              
     }
 }

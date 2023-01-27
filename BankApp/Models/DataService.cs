@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -9,9 +7,7 @@ namespace BankApp.Models
 {
     class DataService
     {
-        static readonly string _filePath = "data.txt";
-
-        public static ObservableCollection<T> DataLoad<T>()
+        public static ObservableCollection<T> DataLoad<T>(string _filePath = "data.txt")
         {
             if (!File.Exists(_filePath))
             {
@@ -24,8 +20,7 @@ namespace BankApp.Models
                 return JsonConvert.DeserializeObject<ObservableCollection<T>>(json);
             }
         }
-
-        public static void DataSave(ObservableCollection<Client> data)
+        public static void DataSave<T>(ObservableCollection<T> data, string _filePath = "data.txt")
         {
             using (StreamWriter sw = new StreamWriter(_filePath, false))
             {
