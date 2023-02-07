@@ -179,6 +179,7 @@ namespace BankApp.ViewModels
 
         public MainWindowViewModel()
         {
+            //checking clients data
             try
             {
                 clientsCollection = DataService.DataLoad<Client>();
@@ -186,8 +187,8 @@ namespace BankApp.ViewModels
             catch(Exception ex)
             {
                 MessageBox.Show($"База клиентов пуста!\nИсключение: {ex.Message}", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            changelog = new ChangelogData();
+            }    
+            // checking changelog data
             try
             {
                 changelog.Changelog = DataService.DataLoad<Changes>("dataChanges.txt");
@@ -196,6 +197,7 @@ namespace BankApp.ViewModels
             {
                 MessageBox.Show($"Журнал изменений пуст!\nИсключение: {ex.Message}", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+            changelog = new ChangelogData();
 
             #region Commands
             CloseAndSaveApplicationCommand = new LambdaCommand(OnCloseAndSaveApplicationCommandExecuted, CanCloseAndSaveApplicationCommandExecute);
