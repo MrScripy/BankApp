@@ -88,7 +88,8 @@ namespace BankApp.ViewModels
                 var values = p as object[];
                 var accType = values[0] as string;
                 var sum = values[1] as string;
-                if (values.Length == 2 && !String.IsNullOrEmpty(accType) && !String.IsNullOrEmpty(sum)) return true;
+                if (values.Length == 2 && !String.IsNullOrEmpty(accType) && !String.IsNullOrEmpty(sum)) 
+                    return true;
             }
             return false;
         }
@@ -178,9 +179,23 @@ namespace BankApp.ViewModels
 
         public MainWindowViewModel()
         {
-            clientsCollection = DataService.DataLoad<Client>();
+            try
+            {
+                clientsCollection = DataService.DataLoad<Client>();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"База клиентов пуста!\nИсключение: {ex.Message}", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             changelog = new ChangelogData();
-            changelog.Changelog = DataService.DataLoad<Changes>("dataChanges.txt");            
+            try
+            {
+                changelog.Changelog = DataService.DataLoad<Changes>("dataChanges.txt");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Журнал изменений пуст!\nИсключение: {ex.Message}", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
             #region Commands
             CloseAndSaveApplicationCommand = new LambdaCommand(OnCloseAndSaveApplicationCommandExecuted, CanCloseAndSaveApplicationCommandExecute);

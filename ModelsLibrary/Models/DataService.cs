@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.IO;
 using Newtonsoft.Json;
+using ModelsLibrary.Exceptions;
 
 
 namespace ModelsLibrary.Models
@@ -12,11 +12,14 @@ namespace ModelsLibrary.Models
             if (!File.Exists(_filePath))
             {
                 File.Create(_filePath).Dispose();
+                throw new UserDataException("UserDataException");
                 return new ObservableCollection<T>();
             }
+
             using (StreamReader sr = new StreamReader(_filePath))
             {
                 var json = sr.ReadToEnd();
+                if (string.IsNullOrEmpty(json)) throw new UserDataException("UserDataException");
                 return JsonConvert.DeserializeObject<ObservableCollection<T>>(json);
             }
         }
@@ -28,5 +31,5 @@ namespace ModelsLibrary.Models
                 sw.Write(output);
             }
         }
-    }
+    }      
 }
