@@ -1,11 +1,11 @@
-﻿using BankApp.Models.Changelog;
+﻿using ModelsLibrary.Models.Changelog;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 
-namespace BankApp.Models
+namespace ModelsLibrary.Models
 {
-    internal class Client : INotifyPropertyChanged
+    public class Client : INotifyPropertyChanged
     {
         #region Fields
         private string name;

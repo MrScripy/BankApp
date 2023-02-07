@@ -1,9 +1,9 @@
 ﻿using System;
 
 
-namespace BankApp.Models
+namespace ModelsLibrary.Models
 {
-    class CurrentAccount : Account
+    public class CurrentAccount : Account
     {
         private int sumMoney;
         public override int SumMoney { get => sumMoney; set => Set(ref sumMoney, value); }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 
 
-namespace BankApp.Models.Changelog
+namespace ModelsLibrary.Models.Changelog
 {
-    internal class ChangelogData
+    public class ChangelogData
     {
         private static ObservableCollection<Changes> changelog;
         public ObservableCollection<Changes> Changelog { get => changelog; set => changelog = value; }

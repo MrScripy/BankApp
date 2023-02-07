@@ -1,6 +1,6 @@
 ﻿using BankApp.Infrastructure.Commands;
-using BankApp.Models;
-using BankApp.Models.Changelog;
+using ModelsLibrary.Models;
+using ModelsLibrary.Models.Changelog;
 using BankApp.ViewModels.Base;
 using System;
 using System.Collections.Generic;

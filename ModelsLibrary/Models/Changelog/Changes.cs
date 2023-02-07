@@ -1,9 +1,9 @@
 ﻿using System;
 
 
-namespace BankApp.Models
+namespace ModelsLibrary.Models
 {
-    internal class Changes
+    public class Changes
     {
         public string Name { get; set; }
         public string PropertyName { get; set; }

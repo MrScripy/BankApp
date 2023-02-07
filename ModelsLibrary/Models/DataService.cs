@@ -3,9 +3,9 @@ using System.IO;
 using Newtonsoft.Json;
 
 
-namespace BankApp.Models
+namespace ModelsLibrary.Models
 {
-    class DataService
+    public class DataService
     {
         public static ObservableCollection<T> DataLoad<T>(string _filePath = "data.txt")
         {

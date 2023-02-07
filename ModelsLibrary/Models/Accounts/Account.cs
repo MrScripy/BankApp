@@ -2,9 +2,9 @@
 using System.Runtime.CompilerServices;
 
 
-namespace BankApp.Models
+namespace ModelsLibrary.Models
 {
-    abstract internal class Account : INotifyPropertyChanged
+    abstract public class Account : INotifyPropertyChanged
     {
         public virtual int SumMoney { get; set; }
         public Account()
